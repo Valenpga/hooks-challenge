@@ -2,10 +2,12 @@ import './App.css';
 import React from 'react';
 import useCustomHook from './hooks/useFecthCharacters';
 
+
 function App() {
+
   const urlPokemon = 'https://pokeapi.co/api/v2/pokemon/1';
   const urlRick = 'https://rickandmortyapi.com/api/character/1';
-
+  
   const pokemonData = useCustomHook(urlPokemon);
   const rickData = useCustomHook(urlRick);
 
@@ -16,14 +18,16 @@ function App() {
       {pokemonData && (
         <>
         <p>Nombre:{pokemonData.name}</p>
-        <img src={pokemonData.sprites.front_default} alt={pokemonData.name}/>
+        {pokemonData.sprites && pokemonData.sprites.front_default && (
+          <img src={pokemonData.sprites.front_default} alt={pokemonData.name}/>
+        )}
         </>
       )}
       <h2>Personaje de Rick and Morty</h2>
       {rickData && (
         <>
         <p>Nombre:{rickData.name}</p>
-        <img src={rickData.image} alt={rickData.name}/>
+        {rickData.image && <img src={rickData.image} alt={rickData.name}/>}
         </>
       )}
     </div>
