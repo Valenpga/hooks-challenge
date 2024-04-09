@@ -1,26 +1,33 @@
-import { useState, useEffect } from "react"; 
 
-function useCustomHook (apiURL)  {
-    const [data, setData] = useState()
+import { useEffect, useState } from "react";
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const response = await fetch(apiURL);
-                if(!response.ok)
-                    throw new Error ('No encuentra imformacion');
+const useFetchCharacter = (url) => {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-                const fetchData = response.json();
-                setData(fetchData);
+  useEffect(() => {
+    // async function fetchURL () {
+    //   try {
+    //     const response = await fetch(url)
+    //     const dataJson = await response.json()
+    //     setData(dataJson)
+    //     setLoading(false)
+    //   } catch (err) {
+    //     console.log(setError(err))
+    //   }
+    // }
+    fetch(url)
+      .then(response => response.json())
+      .then(dataJson => {
+        setData(dataJson)
+        setLoading(false)
+      }).catch(err => {
+        console.log(setError(err))
+      }) 
+  }, [])
+  return {data, loading, error}
+  
+};
 
-            } catch (error) {
-                console.error('Datos no encontrados',error);
-            } 
-            //const fetchData = response.json();
-           //setData();
-        }
-        fetchData();
-    }, [apiURL])
-    return data;
-}
-export default useCustomHook;
+export default useFetchCharacter

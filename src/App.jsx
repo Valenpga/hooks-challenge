@@ -1,37 +1,38 @@
-import './App.css';
-import React from 'react';
-import useCustomHook from './hooks/useFecthCharacters';
 
+import useFetchCharacter from './hooks/useFecthCharacters.js';
+import './App.css';
+import CardApp from './CardApp.jsx'; //components
 
 function App() {
-
   const urlPokemon = 'https://pokeapi.co/api/v2/pokemon/1';
   const urlRick = 'https://rickandmortyapi.com/api/character/1';
+  const { data: pokemon, loading: pokemonLoading} = useFetchCharacter(urlPokemon)
+  const { data: rick, loading: rickLoading } = useFetchCharacter(urlRick)
+  const isLoading = <p>Loading</p>
   
-  const pokemonData = useCustomHook(urlPokemon);
-  const rickData = useCustomHook(urlRick);
 
- 
+
   return (
-    <div>
-      <h2>Personaje de Pokemon</h2>
-      {pokemonData && (
-        <>
-        <p>Nombre:{pokemonData.name}</p>
-        {pokemonData.sprites && pokemonData.sprites.front_default && (
-          <img src={pokemonData.sprites.front_default} alt={pokemonData.name}/>
-        )}
-        </>
-      )}
-      <h2>Personaje de Rick and Morty</h2>
-      {rickData && (
-        <>
-        <p>Nombre:{rickData.name}</p>
-        {rickData.image && <img src={rickData.image} alt={rickData.name}/>}
-        </>
-      )}
-    </div>
-  );
+    <>
+    
+    {pokemonLoading 
+      ? (isLoading) 
+      : (<CardApp 
+          title='Personaje Pokemon'
+          name={pokemon.name}
+          image={pokemon.sprites.other.dream_world.front_default}
+          />)
+    }
+    {rickLoading 
+      ? (isLoading) 
+      : (<CardApp 
+          title='Personaje Rick and Morty'
+          name={rick.name}
+          image={rick.image}
+        />)
+    }    
+    </>
+    );
 }
 
 export default App;
